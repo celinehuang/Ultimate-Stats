@@ -6,7 +6,6 @@ import pandas as pd
 df = pd.read_csv(
     './USAU_Nationals_Player_Stats.csv')
 
-
 def generate_table(dataframe, max_rows=100):
     return html.Table(
         # Header
@@ -27,6 +26,7 @@ app.layout = html.Div(children=[
     html.Div([
         html.Label('Division'),
         dcc.Dropdown(
+        id='division-dropdown',
         options=[
             {'label': 'Open', 'value': 'OPEN'},
             {'label': 'Mixed', 'value': 'MIXED'},
@@ -37,22 +37,31 @@ app.layout = html.Div(children=[
     html.Div([
         html.Label('Team'),
         dcc.Dropdown(
+        id='team-dropdown',
         options=[
             {'label': i, 'value': i} for i in df['Team'].unique()
         ],
-        value='MTL'
     )], style={'width': '15%', 'float': 'left', 'margin': '5px'}),
     html.Div([
         html.Label('Position'),
         dcc.Dropdown(
+        id='position-dropdown',
         options=[
             {'label': i, 'value': i} for i in df['Position'].unique()
         ],
-        value='MTL'
     )], style={'width': '15%', 'float': 'left', 'margin': '5px'}),
 
-    html.Div([generate_table(df)], style={'float': 'left'}) 
+    html.Div([generate_table(df)], id='chart', style={'float': 'left'}) 
 ])
+
+@app.callback(
+    dash.dependencies.Output('chart', 'children'),
+    [dash.dependencies.Input('division-dropdown', 'value'), 
+    dash.dependencies.Input('team-dropdown', 'value'),
+    dash.dependencies.Input('position-dropdown', 'value')])
+def update_data(selected_division, selected_team, selected_position):
+    filtered_df = df[df.Team == selected_team]
+    return generate_table(filtered_df)
 
 if __name__ == '__main__':
     app.run_server(debug=True)
