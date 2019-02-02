@@ -1,7 +1,6 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-import dash_table
 import pandas as pd
 
 df = pd.read_csv(
@@ -35,7 +34,6 @@ app.layout = html.Div(children=[
                 {'label': 'Mixed', 'value': 'Mixed'},
                 {'label': 'Women', 'value': 'Women'}
             ],
-            value='Open'
         )], style={'width': '15%', 'float': 'left', 'display': 'inline-block', 'margin': '5px'}),
     html.Div([
         html.Label('Team'),
@@ -64,16 +62,14 @@ app.layout = html.Div(children=[
 @app.callback(
     dash.dependencies.Output('chart', 'children'),
     [dash.dependencies.Input('team-dropdown', 'value')])
-def update_data(selected_team):
-    filtered_df = df[df.Team == selected_team]
-
-    return generate_table(filtered_df)
+def update_chart(selected_team):
+    return generate_table(df[df.Team == selected_team])
 
 # Callback to update the Team dropdown options based on selected Division
 @app.callback(
     dash.dependencies.Output('team-dropdown', 'options'),
     [dash.dependencies.Input('division-dropdown', 'value')])
-def update_dropdown(selected_division):
+def update_team_dropdown(selected_division):
     return [{'label': i, 'value': i} for i in df['Team'][df.Division == selected_division].unique()]
 
 # Callback to update the Player dropdown options based on selected Team
