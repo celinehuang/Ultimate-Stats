@@ -46,11 +46,11 @@ app.layout = html.Div(children=[
         )], style={'width': '15%', 'float': 'left', 'margin': '5px'}),
 
     html.Div([
-        html.Label('Position'),
+        html.Label('Player'),
         dcc.Dropdown(
-            id='position-dropdown',
+            id='player-dropdown',
             options=[
-                {'label': i, 'value': i} for i in df['Position'].unique()
+                {'label': i, 'value': i} for i in df['Player Name'].unique()
             ],
         )], style={'width': '15%', 'float': 'left', 'margin': '5px'}),
 
@@ -60,10 +60,8 @@ app.layout = html.Div(children=[
 
 @app.callback(
     dash.dependencies.Output('chart', 'children'),
-    [dash.dependencies.Input('division-dropdown', 'value'),
-     dash.dependencies.Input('team-dropdown', 'value'),
-     dash.dependencies.Input('position-dropdown', 'value')])
-def update_data(selected_division, selected_team, selected_position):
+    [dash.dependencies.Input('team-dropdown', 'value')])
+def update_data(selected_team):
     filtered_df = df[df.Team == selected_team]
     return generate_table(filtered_df)
 
@@ -73,6 +71,13 @@ def update_data(selected_division, selected_team, selected_position):
     [dash.dependencies.Input('division-dropdown', 'value')])
 def update_dropdown(selected_division):
     return [{'label': i, 'value': i} for i in df['Team'][df.Division == selected_division].unique()]
+
+
+@app.callback(
+    dash.dependencies.Output('player-dropdown', 'options'),
+    [dash.dependencies.Input('team-dropdown', 'value')])
+def update_player_dropdown(selected_team):
+    return [{'label': i, 'value': i} for i in df['Player Name'][df.Team == selected_team]]
 
 
 if __name__ == '__main__':
