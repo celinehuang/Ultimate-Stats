@@ -38,9 +38,7 @@ app.layout = html.Div(children=[
         html.Label('Team'),
         dcc.Dropdown(
         options=[
-            {'label': 'New York City', 'value': 'NYC'},
-            {'label': u'Montréal', 'value': 'MTL'},
-            {'label': 'San Francisco', 'value': 'SF'}
+            {'label': i, 'value': i} for i in df['Team'].unique()
         ],
         value='MTL'
     )], style={'width': '15%', 'float': 'left', 'margin': '5px'}),
@@ -48,9 +46,7 @@ app.layout = html.Div(children=[
         html.Label('Position'),
         dcc.Dropdown(
         options=[
-            {'label': 'New York City', 'value': 'NYC'},
-            {'label': u'Montréal', 'value': 'MTL'},
-            {'label': 'San Francisco', 'value': 'SF'}
+            {'label': i, 'value': i} for i in df['Position'].unique()
         ],
         value='MTL'
     )], style={'width': '15%', 'float': 'left', 'margin': '5px'}),
