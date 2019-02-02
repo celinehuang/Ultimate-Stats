@@ -15,9 +15,8 @@ def generate_table(dataframe, max_rows=100):
         # Body
         [html.Tr([
             html.Td(dataframe.iloc[i][col]) for col in dataframe.columns
-        ]) for i in range(min(len(dataframe), max_rows))]
+        ]) for i in range(len(dataframe))]
     )
-
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -27,6 +26,7 @@ app.layout = html.Div(children=[
     html.H4(children='USAU Club Nationals - 2018'),
     html.Div([
         html.Label('Division'),
+        # Division dropdown
         dcc.Dropdown(
             id='division-dropdown',
             options=[
@@ -34,10 +34,10 @@ app.layout = html.Div(children=[
                 {'label': 'Mixed', 'value': 'Mixed'},
                 {'label': 'Women', 'value': 'Women'}
             ],
-            value='Open'
         )], style={'width': '15%', 'float': 'left', 'display': 'inline-block', 'margin': '5px'}),
     html.Div([
         html.Label('Team'),
+        # Team dropdown
         dcc.Dropdown(
             id='team-dropdown',
             options=[
@@ -46,33 +46,38 @@ app.layout = html.Div(children=[
         )], style={'width': '15%', 'float': 'left', 'margin': '5px'}),
 
     html.Div([
-        html.Label('Position'),
+        html.Label('Player'),
+        # Individual player dropdown
         dcc.Dropdown(
-            id='position-dropdown',
+            id='player-dropdown',
             options=[
-                {'label': i, 'value': i} for i in df['Position'].unique()
+                {'label': i, 'value': i} for i in df['Player Name'].unique()
             ],
         )], style={'width': '15%', 'float': 'left', 'margin': '5px'}),
 
-    html.Div([generate_table(df)], id='chart', style={'float': 'left'})
+    html.Div([], id='chart', style={'float': 'left'})
 ])
 
-
+# Callback to update the chart based on the selected team
 @app.callback(
     dash.dependencies.Output('chart', 'children'),
-    [dash.dependencies.Input('division-dropdown', 'value'),
-     dash.dependencies.Input('team-dropdown', 'value'),
-     dash.dependencies.Input('position-dropdown', 'value')])
-def update_data(selected_division, selected_team, selected_position):
-    filtered_df = df[df.Team == selected_team]
-    return generate_table(filtered_df)
+    [dash.dependencies.Input('team-dropdown', 'value')])
+def update_chart(selected_team):
+    return generate_table(df[df.Team == selected_team])
 
-
+# Callback to update the Team dropdown options based on selected Division
 @app.callback(
     dash.dependencies.Output('team-dropdown', 'options'),
     [dash.dependencies.Input('division-dropdown', 'value')])
-def update_dropdown(selected_division):
+def update_team_dropdown(selected_division):
     return [{'label': i, 'value': i} for i in df['Team'][df.Division == selected_division].unique()]
+
+# Callback to update the Player dropdown options based on selected Team
+@app.callback(
+    dash.dependencies.Output('player-dropdown', 'options'),
+    [dash.dependencies.Input('team-dropdown', 'value')])
+def update_player_dropdown(selected_team):
+    return [{'label': i, 'value': i} for i in df['Player Name'][df.Team == selected_team]]
 
 
 if __name__ == '__main__':
