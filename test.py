@@ -4,7 +4,7 @@ import dash_html_components as html
 import pandas as pd
 
 df = pd.read_csv(
-    '/Users/albert/Downloads/USAU_Nationals_Player_Stats_Open.csv')
+    './USAU_National_Player_Stats.csv')
 
 
 def generate_table(dataframe, max_rows=100):
