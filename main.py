@@ -55,7 +55,7 @@ app.layout = html.Div(children=[
             ],
         )], style={'width': '15%', 'float': 'left', 'margin': '5px'}),
 
-    html.Div([generate_table(df)], id='chart', style={'float': 'left'})
+    html.Div([], id='chart', style={'float': 'left'})
 ])
 
 # Callback to update the chart based on the selected team
