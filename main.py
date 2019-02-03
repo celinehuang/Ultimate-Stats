@@ -4,6 +4,7 @@ import dash_html_components as html
 import dash_table
 import pandas as pd
 
+
 df = pd.read_csv(
     './USAU_Nationals_Player_Stats.csv')
 
@@ -24,7 +25,9 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 app.layout = html.Div(children=[
-    html.H4(children='USAU Club Nationals - 2018'),
+    html.Div([html.H1( 
+        className= 'app-header',
+        children='USAU Club Nationals - 2018')]),
     html.Div([
         html.Label('Division'),
         # Division dropdown
@@ -56,7 +59,7 @@ app.layout = html.Div(children=[
             ],
         )], style={'width': '15%', 'float': 'left', 'margin': '5px'}),
 
-    html.Div([], id='chart', style={'float': 'left'})
+    html.Div([html.Div([], id='chart', style={'float': 'left'})], className='pimg1')
 ])
 
 # Callback to update the chart based on the selected team/player

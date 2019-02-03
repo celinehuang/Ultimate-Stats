@@ -1,0 +1,40 @@
+.app-header {
+  height: 60px;
+  line-height: 60px;
+  border-bottom: thin lightgrey solid;
+  color: #92d9ec;
+  font-weight: bold;
+}
+
+.app-header .app-header--title {
+  font-size: 22px;
+  padding-left: 5px;
+}
+
+.color-box {
+  float: left;
+  background-color: #6389f1;
+  width: 200px;
+  padding: 5%;
+  border-radius: 15px;
+}
+
+.logo {
+  width: 200px;
+  float: right;
+}
+
+.inline-div {
+  display: inline-block;
+}
+
+.pimg1 {
+  background-image: url(../assets/USAUltimateLogo.jpg);
+  min-height: 100%;
+  opacity: 0.4;
+  position: relative;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
