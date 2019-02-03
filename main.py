@@ -51,19 +51,23 @@ app.layout = html.Div(children=[
         dcc.Dropdown(
             id='player-dropdown',
             options=[
-                {'label': i, 'value': i} for i in df['Player Name'].unique()
+                {'label': i, 'value': i} for i in df['Player'].unique()
             ],
         )], style={'width': '15%', 'float': 'left', 'margin': '5px'}),
 
     html.Div([], id='chart', style={'float': 'left'})
 ])
 
-# Callback to update the chart based on the selected team
+# Callback to update the chart based on the selected team/player
 @app.callback(
     dash.dependencies.Output('chart', 'children'),
-    [dash.dependencies.Input('team-dropdown', 'value')])
-def update_chart(selected_team):
-    return generate_table(df[df.Team == selected_team])
+    [dash.dependencies.Input('team-dropdown', 'value'),
+    dash.dependencies.Input('player-dropdown', 'value')])
+def update_chart(selected_team, selected_player):
+    if (selected_player is None):
+        return generate_table(df[df.Team == selected_team])
+    else:
+        return generate_table(df[df.Player == selected_player])
 
 # Callback to update the Team dropdown options based on selected Division
 @app.callback(
@@ -77,7 +81,7 @@ def update_team_dropdown(selected_division):
     dash.dependencies.Output('player-dropdown', 'options'),
     [dash.dependencies.Input('team-dropdown', 'value')])
 def update_player_dropdown(selected_team):
-    return [{'label': i, 'value': i} for i in df['Player Name'][df.Team == selected_team]]
+    return [{'label': i, 'value': i} for i in df['Player'][df.Team == selected_team]]
 
 
 if __name__ == '__main__':
