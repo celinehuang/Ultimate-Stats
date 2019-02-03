@@ -62,10 +62,13 @@ app.layout = html.Div(children=[
 # Callback to update the chart based on the selected team/player
 @app.callback(
     dash.dependencies.Output('chart', 'children'),
-    [dash.dependencies.Input('team-dropdown', 'value'),
+    [dash.dependencies.Input('division-dropdown', 'value'), 
+    dash.dependencies.Input('team-dropdown', 'value'),
     dash.dependencies.Input('player-dropdown', 'value')])
-def update_chart(selected_team, selected_player):
-    if (selected_player is None):
+def update_chart(selected_division, selected_team, selected_player):
+    if (selected_team is None and selected_player is None):
+        return generate_table(df[df.Division == selected_division])
+    elif (selected_player is None):
         return generate_table(df[df.Team == selected_team])
     else:
         return generate_table(df[df.Player == selected_player])
