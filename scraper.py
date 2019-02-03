@@ -17,7 +17,7 @@ def scraper(link):
    df[0]['Team'] = name
    return df
 
-def scrape_one_division(link):
+def scrape_one_division(link, division):
    
    df = pd.DataFrame()
    #driver = webdriver.Firefox()
@@ -32,7 +32,8 @@ def scrape_one_division(link):
          continue
       else:
          df = df.append(scraper("https://play.usaultimate.org" + str(page['href'])), ignore_index=True)
-   
+   df['Division'] = division
+
    return df
 
 def scrape_one_year(link, year):
@@ -40,12 +41,12 @@ def scrape_one_year(link, year):
    divisions = ["Men", "Women", "Mixed"]
    for div in divisions:
       print(link + div)
-      df = df.append(scrape_one_division(link + div))
+      df = df.append(scrape_one_division((link + div), div))
       print (df)
-      df["Division"] = div
+      
    df["Year"] = year
 
    return df
 
 if __name__ == "__main__":
-   scrape_one_year("https://play.usaultimate.org/teams/events/team_rankings/?RankSet=Club-", 20018).to_csv("./data_set.csv")
+   scrape_one_year("https://play.usaultimate.org/teams/events/team_rankings/?RankSet=Club-", 2018).to_csv("./data_set.csv")
