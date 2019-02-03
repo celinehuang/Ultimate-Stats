@@ -6,7 +6,7 @@ import pandas as pd
 
 
 df = pd.read_csv(
-    './USAU_Nationals_Player_Stats.csv')
+    './data_set.csv')
 
 
 def generate_table(dataframe, max_rows=100):
@@ -28,6 +28,16 @@ app.layout = html.Div(children=[
     html.Div([html.H1( 
         className= 'app-header',
         children='USAU Club Nationals - 2018')]),
+    html.Div([
+        html.Label('Year'),
+        # Year dropdown
+        dcc.Dropdown(
+            id='year-dropdown',
+            options=[
+                {'label': i, 'value': i} for i in df['Year'].unique()
+            ],
+            value='2018'
+        )], style={'width': '15%', 'float': 'left', 'display': 'inline-block', 'margin': '5px'}),
     html.Div([
         html.Label('Division'),
         # Division dropdown
@@ -69,6 +79,8 @@ app.layout = html.Div(children=[
     dash.dependencies.Input('team-dropdown', 'value'),
     dash.dependencies.Input('player-dropdown', 'value')])
 def update_chart(selected_division, selected_team, selected_player):
+    if (selected_division is None and selected_team is None and selected_player is None):
+        return generate_table(df[df.Team == 'abc'])
     if (selected_team is None and selected_player is None):
         return generate_table(df[df.Division == selected_division])
     elif (selected_player is None):
