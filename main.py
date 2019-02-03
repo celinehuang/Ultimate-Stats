@@ -27,7 +27,9 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.layout = html.Div(children=[
     html.Div([html.H1( 
         className= 'app-header',
-        children='USAU Club Nationals - 2018')]),
+        id="title",
+        children='USAU Club Nationals - 2018'), 
+        ]),
     html.Div([
         html.Label('Year'),
         # Year dropdown
@@ -87,11 +89,12 @@ def update_chart(selected_division, selected_team, selected_player):
         return generate_table(df[df.Team == selected_team])
     else:
         player_df = df[df.Player == selected_player]
+
         return html.Div([
             html.Div([generate_table(player_df)]
             ),
             html.Div([dcc.Graph(
-                    id='example-graph',
+                    id='player-data-visualization',
                     figure={
                     'data': [
                         {'x': ['Goals', 'Assists', 'Ds', 'Turnovers'], 
@@ -99,8 +102,8 @@ def update_chart(selected_division, selected_team, selected_player):
                         player_df.iloc[0]['Turnovers']], 'type': 'bar', 'name': ''},
                     ],
                     'layout': {
-                        'title': 'Data Visualization - ' + selected_player 
-                    }
+                        'title': 'Data Visualization - ' + selected_player
+                    },
                 }
             )])
         ])
@@ -119,6 +122,11 @@ def update_team_dropdown(selected_division):
 def update_player_dropdown(selected_team):
     return [{'label': i, 'value': i} for i in df['Player'][df.Team == selected_team]]
 
+@app.callback(
+    dash.dependencies.Output('title', 'children'),
+    [dash.dependencies.Input('year-dropdown', 'value')])
+def update_title(selected_year):
+    return 'USAU Club Nationals - ' + str(selected_year)
 
 if __name__ == '__main__':
     app.run_server(debug=True)

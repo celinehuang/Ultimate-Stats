@@ -4,6 +4,7 @@
   border-bottom: thin lightgrey solid;
   color: #92d9ec;
   font-weight: bold;
+  width: 50%;
 }
 
 .app-header .app-header--title {
@@ -19,22 +20,12 @@
   border-radius: 15px;
 }
 
-.logo {
-  width: 200px;
-  float: right;
-}
-
 .inline-div {
   display: inline-block;
 }
 
-.pimg1 {
-  background-image: url(../assets/USAUltimateLogo.jpg);
-  min-height: 100%;
+.logo {
   opacity: 0.4;
-  position: relative;
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  margin: 24px 0 0 30px;
+  width: 20px;
 }
