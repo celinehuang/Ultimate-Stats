@@ -59,7 +59,7 @@ app.layout = html.Div(children=[
             ],
         )], style={'width': '15%', 'float': 'left', 'margin': '5px'}),
 
-    html.Div([html.Div([], id='chart', style={'float': 'left'})], className='pimg1')
+    html.Div([html.Div([], id='chart', style={'float': 'left'})])
 ])
 
 # Callback to update the chart based on the selected team/player
@@ -74,7 +74,24 @@ def update_chart(selected_division, selected_team, selected_player):
     elif (selected_player is None):
         return generate_table(df[df.Team == selected_team])
     else:
-        return generate_table(df[df.Player == selected_player])
+        player_df = df[df.Player == selected_player]
+        return html.Div([
+            html.Div([generate_table(player_df)]
+            ),
+            html.Div([dcc.Graph(
+                    id='example-graph',
+                    figure={
+                    'data': [
+                        {'x': ['Goals', 'Assists', 'Ds', 'Turnovers'], 
+                        'y': [player_df.iloc[0]['Goals'], player_df.iloc[0]['Assists'], player_df.iloc[0]['Ds'], 
+                        player_df.iloc[0]['Turnovers']], 'type': 'bar', 'name': ''},
+                    ],
+                    'layout': {
+                        'title': 'Data Visualization - ' + selected_player 
+                    }
+                }
+            )])
+        ])
 
 # Callback to update the Team dropdown options based on selected Division
 @app.callback(
