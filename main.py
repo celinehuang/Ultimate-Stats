@@ -83,10 +83,13 @@ app.layout = html.Div(children=[
 def update_chart(selected_division, selected_team, selected_player):
     if (selected_division is None and selected_team is None and selected_player is None):
         return generate_table(df[df.Team == 'abc'])
+
     if (selected_team is None and selected_player is None):
         return generate_table(df[df.Division == selected_division])
+
     elif (selected_player is None):
         return generate_table(df[df.Team == selected_team])
+        
     else:
         player_df = df[df.Player == selected_player]
 
